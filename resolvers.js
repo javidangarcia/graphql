@@ -39,4 +39,28 @@ export const resolvers = {
             return db.authors.find(author => author.id === parent.author_id);
         },
     },
+    Mutation: {
+        deleteGame(_, args) {
+            return db.games.filter(game => game.id !== args.id);
+        },
+        addGame(_, args) {
+            const game = {
+                ...args.game,
+                id: Math.floor(Math.random() * 10000),
+            };
+            db.games.push(game);
+            return game;
+        },
+        updateGame(_, args) {
+            db.games = db.games.map(game => {
+                if (game.id === args.id) {
+                    return { ...game, ...args.edits };
+                } else {
+                    return game;
+                }
+            });
+
+            return db.games.find(game => game.id === args.id);
+        },
+    },
 };
